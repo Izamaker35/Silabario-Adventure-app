@@ -1,0 +1,9 @@
+CÓMO OBTENER EL APK (gratis, sin instalar nada)
+1. Crea una cuenta en github.com y un repositorio nuevo (privado o público).
+2. Sube TODO el contenido de esta carpeta (incluida la carpeta oculta .github).
+3. Entra a la pestaña "Actions" > "Construir APK" > "Run workflow". Espera ~5 min.
+4. Abre la ejecución terminada y descarga el artefacto "silabario-aventura-apk" (zip con app-debug.apk).
+5. Pasa el APK al teléfono Android, ábrelo y permite "instalar apps de orígenes desconocidos".
+
+ALTERNATIVA con Android Studio: npm install; npx cap add android; npx cap sync; npx cap open android; Build > Build APK.
+Nota: la voz usa el motor de texto a voz de Android (instala "Voz de Google" en español).
