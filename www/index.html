@@ -98,7 +98,7 @@ try{loadV();speechSynthesis.onvoiceschanged=loadV}catch(e){}
 const SYL=/^(?:[bcdfjlmnprstv]?[aeiou]|gua)$/i,_u=[];
 function clr(){document.querySelectorAll('.lit').forEach(e=>e.classList.remove('lit'))}
 function sp(t,s){t=nz(t.toLowerCase());if(SYL.test(t)){return t+'h'}return t}
-const TTS=(()=>{try{return window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()?Capacitor.registerPlugin('TextToSpeech'):null}catch(e){return null}})();let chain=Promise.resolve(),gen=0;
+const TTS=(()=>{try{const C=window.Capacitor;if(!C)return null;let p=C.Plugins&&C.Plugins.TextToSpeech;if(!p&&typeof C.registerPlugin==='function'&&(window.androidBridge||(C.isNativePlatform&&C.isNativePlatform())||(C.getPlatform&&C.getPlatform()!=='web')))p=C.registerPlugin('TextToSpeech');return p||null}catch(e){return null}})();let chain=Promise.resolve(),gen=0;
 function toast(m){let d=document.getElementById('toast');if(!d){d=document.createElement('div');d.id='toast';d.style.cssText='position:fixed;left:10px;right:10px;bottom:14px;background:#2b2350;color:#fff;border-radius:16px;padding:10px 14px;font-size:1rem;z-index:99;text-align:center';document.body.appendChild(d)}d.textContent=m;d.style.display='block';clearTimeout(d._t);d._t=setTimeout(()=>{d.style.display='none'},7000)}
 let NV=[];
 function initTTS(n){if(!TTS)return;TTS.getSupportedVoices().then(r=>{const sc=v=>/^es-MX/i.test(v.lang)?3:/^es-(US|419)/i.test(v.lang)?2:1;NV=(r.voices||[]).map((v,i)=>({i,lang:(v.lang||'').replace('_','-'),name:v.name})).filter(v=>/^es/i.test(v.lang)).sort((a,b)=>sc(b)-sc(a));if(!NV.length){if(n<3)setTimeout(()=>initTTS(n+1),2000);else toast('No hay voz en español instalada. Ve a Ajustes > Salida de texto a voz e instala Servicios de voz de Google en español.')}}).catch(e=>toast('Voz: '+((e&&e.message)||e)))}
@@ -106,6 +106,7 @@ initTTS(0);
 async function diag(){let d=document.getElementById('dg');if(!d){d=document.createElement('pre');d.id='dg';d.style.cssText='white-space:pre-wrap;background:var(--card);border:3px solid var(--line);border-radius:16px;padding:10px;font-size:.95rem;margin-top:16px';app.appendChild(d)}
 const o=[],L=m=>{o.push(m);d.textContent=o.join('\n')};
 L('Nativo: '+(window.Capacitor&&Capacitor.isNativePlatform?Capacitor.isNativePlatform():'sin Capacitor'));
+L('Capacitor: '+(window.Capacitor?'sí, plataforma '+(Capacitor.getPlatform?Capacitor.getPlatform():'?')+', plugins: '+Object.keys(Capacitor.Plugins||{}).join(', '):'no existe'));
 L('Plugin de voz: '+(TTS?'sí':'no'));
 L('Voz web: '+(typeof speechSynthesis!=='undefined'?'sí':'no'));
 beep(1);L('Pitido enviado. ¿Lo oíste?');
